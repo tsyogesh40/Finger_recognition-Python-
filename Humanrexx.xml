@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+- phpMyAdmin XML Dump
+- version 4.6.6deb5
+- https://www.phpmyadmin.net
+-
+- Host: localhost:3306
+- Generation Time: Feb 02, 2018 at 10:34 PM
+- Server version: 5.7.21-0ubuntu0.17.10.1
+- PHP Version: 7.1.11-0ubuntu0.17.10.1
+-->
+
+<pma_xml_export version="1.0" xmlns:pma="https://www.phpmyadmin.net/some_doc_url/">
+    <!--
+    - Structure schemas
+    -->
+    <pma:structure_schemas>
+        <pma:database name="Humanrexx" collation="latin1_swedish_ci" charset="latin1">
+            <pma:table name="admin_credentials">
+                CREATE TABLE `admin_credentials` (
+                  `name` varchar(50) NOT NULL,
+                  `password` varchar(50) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="altered_time">
+                CREATE TABLE `altered_time` (
+                  `date` date NOT NULL,
+                  `in_time` time NOT NULL,
+                  `out_time` time NOT NULL,
+                  `cadre` enum('T','NT') NOT NULL,
+                  KEY `cadre_ref` (`cadre`),
+                  CONSTRAINT `cadre_ref` FOREIGN KEY (`cadre`) REFERENCES `default_time` (`cadre`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="CIVIL_entry">
+                CREATE TABLE `CIVIL_entry` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(11) NOT NULL,
+                  `in_time` time NOT NULL,
+                  `outtime` time NOT NULL,
+                  `p_value` int(11) NOT NULL,
+                  `status` enum('LATE','ONTME') NOT NULL,
+                  `date` date NOT NULL,
+                  `semester` enum('ODD','EVEN') NOT NULL,
+                  `year` year(4) NOT NULL,
+                  KEY `staffid_ref_IT` (`staff_id`),
+                  CONSTRAINT `staffid_ref_CIVIL` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="counter">
+                CREATE TABLE `counter` (
+                  `staff_id` varchar(12) NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `count` int(1) NOT NULL DEFAULT '0' COMMENT 'If(counter&gt;=3) then p_value--;',
+                  `late_days` int(5) NOT NULL DEFAULT '0',
+                  UNIQUE KEY `staff_id` (`staff_id`),
+                  CONSTRAINT `staffid_ref_counter` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="CSE_entry">
+                CREATE TABLE `CSE_entry` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(11) NOT NULL,
+                  `in_time` time NOT NULL,
+                  `outtime` time NOT NULL,
+                  `p_value` int(11) NOT NULL,
+                  `status` enum('LATE','ONTME') NOT NULL,
+                  `date` date NOT NULL,
+                  `semester` enum('ODD','EVEN') NOT NULL,
+                  `year` year(4) NOT NULL,
+                  KEY `staffid_ref_IT` (`staff_id`),
+                  CONSTRAINT `staffid_ref_CSE` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="default_time">
+                CREATE TABLE `default_time` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `in_time` time NOT NULL,
+                  `out_time` time NOT NULL,
+                  PRIMARY KEY (`cadre`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Default time for Teaching and Non- teaching staffs';
+            </pma:table>
+            <pma:table name="ECE_entry">
+                CREATE TABLE `ECE_entry` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(11) NOT NULL,
+                  `in_time` time NOT NULL,
+                  `outtime` time NOT NULL,
+                  `p_value` int(11) NOT NULL,
+                  `status` enum('LATE','ONTME') NOT NULL,
+                  `date` date NOT NULL,
+                  `semester` enum('ODD','EVEN') NOT NULL,
+                  `year` year(4) NOT NULL,
+                  KEY `staffid_ref_IT` (`staff_id`),
+                  CONSTRAINT `staffid_ref_ECE` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="EEE_entry">
+                CREATE TABLE `EEE_entry` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(11) NOT NULL,
+                  `in_time` time NOT NULL,
+                  `outtime` time NOT NULL,
+                  `p_value` int(11) NOT NULL,
+                  `status` enum('LATE','ONTME') NOT NULL,
+                  `date` date NOT NULL,
+                  `semester` enum('ODD','EVEN') NOT NULL,
+                  `year` year(4) NOT NULL,
+                  KEY `staffid_ref_IT` (`staff_id`),
+                  CONSTRAINT `staffid_ref_EEE` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="fingerprint_details">
+                CREATE TABLE `fingerprint_details` (
+                  `name` varchar(50) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(3) NOT NULL COMMENT 'fingerprints are being stored in the scanner using this storeid',
+                  `finger_name` enum('LEFT_THUMB','RIGHT_THUMB','LEFT_INDEX','RIGHT_INDEX','LEFT_MID','RIGHT_MID') NOT NULL,
+                  `finger_code` enum('LT','RT','LI','RI','LM','RM') NOT NULL COMMENT 'Abbrevated finger name',
+                  `finger_print` varchar(2000) NOT NULL,
+                  `enroll_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                  KEY `reference` (`staff_id`),
+                  CONSTRAINT `reference` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="IT_entry">
+                CREATE TABLE `IT_entry` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(11) NOT NULL,
+                  `in_time` time NOT NULL,
+                  `outtime` time NOT NULL,
+                  `p_value` int(11) NOT NULL,
+                  `status` enum('LATE','ONTME') NOT NULL,
+                  `date` date NOT NULL,
+                  `semester` enum('ODD','EVEN') NOT NULL,
+                  `year` year(4) NOT NULL,
+                  KEY `staffid_ref_IT` (`staff_id`),
+                  CONSTRAINT `staffid_ref_IT` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="MECH_entry">
+                CREATE TABLE `MECH_entry` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(11) NOT NULL,
+                  `in_time` time NOT NULL,
+                  `outtime` time NOT NULL,
+                  `p_value` int(11) NOT NULL,
+                  `status` enum('LATE','ONTME') NOT NULL,
+                  `date` date NOT NULL,
+                  `semester` enum('ODD','EVEN') NOT NULL,
+                  `year` year(4) NOT NULL,
+                  KEY `staffid_ref_IT` (`staff_id`),
+                  CONSTRAINT `staffid_ref_MECH` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="overall_presence">
+                CREATE TABLE `overall_presence` (
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `total_days` int(4) NOT NULL,
+                  `present_days` int(4) NOT NULL,
+                  `absent_days` int(4) NOT NULL,
+                  KEY `staffid_ref_overall_presence` (`staff_id`),
+                  CONSTRAINT `staffid_ref_overall_presence` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="staff_details">
+                CREATE TABLE `staff_details` (
+                  `name` varchar(100) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(3) NOT NULL,
+                  `finger_preference` enum('LT','RT','LI','RI','LM','RM') NOT NULL DEFAULT 'LI',
+                  `department` enum('IT','CSE','MECH','ECE','EEE','CIVIL') NOT NULL,
+                  `designation` varchar(30) NOT NULL,
+                  `cadre` enum('T','NT') NOT NULL COMMENT 'T- Teaching staff , NT- Non teaching staff',
+                  `gender` enum('M','F') NOT NULL,
+                  `phone` bigint(12) NOT NULL,
+                  `email` varchar(50) NOT NULL,
+                  `DOJ` date NOT NULL,
+                  PRIMARY KEY (`staff_id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="temp_entry">
+                CREATE TABLE `temp_entry` (
+                  `cadre` enum('T','NT') NOT NULL,
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `store_id` int(3) NOT NULL,
+                  `dept` enum('IT','CSE','MECH','ECE','EEE','CIVIL') NOT NULL,
+                  `in_time` time DEFAULT NULL,
+                  `out_time` time DEFAULT NULL,
+                  `p_value` int(2) NOT NULL DEFAULT '0' COMMENT '1- Morning entry 2, Evening Entry',
+                  `no_of_entry` int(1) NOT NULL DEFAULT '0',
+                  `status` enum('LATE','ONTIME') DEFAULT NULL,
+                  `date` date DEFAULT NULL,
+                  `semester` enum('ODD','EVEN') NOT NULL,
+                  `year` year(4) DEFAULT NULL,
+                  KEY `staffid_ref` (`staff_id`),
+                  KEY `cadre_ref_temp` (`cadre`),
+                  CONSTRAINT `cadre_ref_temp` FOREIGN KEY (`cadre`) REFERENCES `default_time` (`cadre`),
+                  CONSTRAINT `staffid_ref` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="user_credentials">
+                CREATE TABLE `user_credentials` (
+                  `name` varchar(60) NOT NULL,
+                  `staff_id` varchar(12) NOT NULL,
+                  `username` varchar(30) NOT NULL,
+                  `password` varchar(30) NOT NULL,
+                  `desgination` enum('P','H','S') NOT NULL COMMENT 'P-PRINCIPAL , H- HOD, S- STAFFS',
+                  `last_login` time NOT NULL,
+                  KEY `staffid_ref_user_credentials` (`staff_id`),
+                  CONSTRAINT `staffid_ref_user_credentials` FOREIGN KEY (`staff_id`) REFERENCES `staff_details` (`staff_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+            </pma:table>
+        </pma:database>
+    </pma:structure_schemas>
+
+    <!--
+    - Database: 'Humanrexx'
+    -->
+    <database name="Humanrexx">
+        <!-- Table admin_credentials -->
+        <!-- Table altered_time -->
+        <table name="altered_time">
+            <column name="date">2018-02-01</column>
+            <column name="in_time">09:00:00</column>
+            <column name="out_time">17:30:00</column>
+            <column name="cadre">T</column>
+        </table>
+        <table name="altered_time">
+            <column name="date">2018-02-01</column>
+            <column name="in_time">08:30:00</column>
+            <column name="out_time">05:30:00</column>
+            <column name="cadre">NT</column>
+        </table>
+        <!-- Table CIVIL_entry -->
+        <!-- Table counter -->
+        <table name="counter">
+            <column name="staff_id">14IT46</column>
+            <column name="name">Yogesh T S</column>
+            <column name="count">1</column>
+            <column name="late_days">1</column>
+        </table>
+        <table name="counter">
+            <column name="staff_id">14IT47</column>
+            <column name="name">Yogesh 1</column>
+            <column name="count">3</column>
+            <column name="late_days">3</column>
+        </table>
+        <table name="counter">
+            <column name="staff_id">14it48</column>
+            <column name="name">Yogesh 2</column>
+            <column name="count">1</column>
+            <column name="late_days">1</column>
+        </table>
+        <table name="counter">
+            <column name="staff_id">14IT49</column>
+            <column name="name">Yogesh 3</column>
+            <column name="count">1</column>
+            <column name="late_days">1</column>
+        </table>
+        <table name="counter">
+            <column name="staff_id">14IT50</column>
+            <column name="name">Gokul T S</column>
+            <column name="count">1</column>
+            <column name="late_days">1</column>
+        </table>
+        <!-- Table CSE_entry -->
+        <!-- Table default_time -->
+        <table name="default_time">
+            <column name="cadre">T</column>
+            <column name="in_time">09:00:00</column>
+            <column name="out_time">17:30:00</column>
+        </table>
+        <table name="default_time">
+            <column name="cadre">NT</column>
+            <column name="in_time">08:30:00</column>
+            <column name="out_time">17:30:00</column>
+        </table>
+        <!-- Table ECE_entry -->
+        <!-- Table EEE_entry -->
+        <!-- Table fingerprint_details -->
+        <table name="fingerprint_details">
+            <column name="name">Yogesh T S</column>
+            <column name="staff_id">14IT46</column>
+            <column name="store_id">2</column>
+            <column name="finger_name">LEFT_INDEX</column>
+            <column name="finger_code">LI</column>
+            <column name="finger_print">ef01ffffffff020102030159180000ff06f806f002c000800000000000000000000000000000000000000000000000000000000000000000000000000000000000298c001e5e0f85fe5a155abe3b22d53e5c259d1e32a980de4fbb9f9e670c5b9f3a91c17f2312949f391715bf35ae943f21b4285f1f196b7d48a9877d4a2cdcbd542fddfd4c06675a478756b31b9cd2b8213de8b823c229b8243f91d94e324a8e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002cd0ef01ffffffff080102030155180000fc06f006e002c002000200000000000000000000000000000000000000000000000200000000000000000000000000000000298c6cbe5e0f461e5a155ade5c259d1e4fbca01e658bdbdf3b1181df2212d49f381715bf3da4563f312ac09f35ae53ff2233e87f1d99eb3d48a9877d4a2cdcbd542fddfd40078012488640f04c8697701c1cd2d6460797b14db20a0e24c1a9f200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002db4</column>
+            <column name="enroll_time">2018-01-30 13:29:33</column>
+        </table>
+        <table name="fingerprint_details">
+            <column name="name">Yogesh 1</column>
+            <column name="staff_id">14IT47</column>
+            <column name="store_id">4</column>
+            <column name="finger_name">LEFT_MID</column>
+            <column name="finger_code">LM</column>
+            <column name="finger_print">ef01ffffffff020102030154130000fffefc0efc06e002800080000000000000000000000000000000000000000000000000000000000000000000000000000000229a295e341eebde293e25fe4222553f0aa3105749a995bf5033171f6eb6deff3bbc0eff58bcda5f163e253f46bc4f7c4b24c37d6536dddd61119a585e1459985cb79cb858379ad9501142f60000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026f2ef01ffffffff080102030157140000fffefe0efe06e002c000c00080008000000000000000000000000000000000008000000000000000000000000000000000005f1299fe349c2c5e3f9ed49e2bbc25be2295ea1f4ba2c43f4a27d63f77ad9edf503456bf6cb5df5f473a8fbf183be4ff3bbc0eff583c9adf598d58fc530f835c4fbe073a63b65e7b5c35dd395736dbb90000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002e4c</column>
+            <column name="enroll_time">2018-02-01 18:43:15</column>
+        </table>
+        <table name="fingerprint_details">
+            <column name="name">Yogesh 2</column>
+            <column name="staff_id">14it48</column>
+            <column name="store_id">6</column>
+            <column name="finger_name">LEFT_THUMB</column>
+            <column name="finger_code">LT</column>
+            <column name="finger_print">ef01ffffffff02010203015c280000f87ec03e801e80060002000000000000000000000000000000000000000000000000000000000000000000000000000000006113dcbe2e17d65e3b27171e77a88616703245de3b3656de20b6ac5e2f39959e5b10059f5a1c041f0db4d7df28bf813f59a199fc4d26599c46ac17dc0aaf129c6c391bbc0abaa9dc6c3d05dc4c3d449c0f3daa3c354001fc0e2caafd3cafd71d49c0d91d468f00b2529fc37a6ba39b7a48a8c3da4c0f58932115d5fb1216ac3b2fc197db330c97326e1f0558699fdb79281f56921498ac70271b55ca211f400c00000000000000000000000000000000000000000000000000000000000000000000000000000000455def01ffffffff08010203015d240000f9fef0fee0fec002c002c0028002800200000000000000000000000000000000000000000000000000000000000000000000358a9a7e238fc21e2f1198be411283be49951a5e159b15d610a31696242a165e1f31c0fe1433139e3c3e837e3f42585e2543409e6d9c05df2cb8561f21be14df4e1f9a1c52a31abc6b2b465c31ae573c6aaedbfc5d31c51c2733d5dc61935c325b95c5b2419dc3da432258da5cbc457a60181c3259b69c9255b445535aba1b5960231b760eb82b16311e430e561f04b20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000413d</column>
+            <column name="enroll_time">2018-02-01 18:58:43</column>
+        </table>
+        <table name="fingerprint_details">
+            <column name="name">Yogesh 3</column>
+            <column name="staff_id">14IT49</column>
+            <column name="store_id">3</column>
+            <column name="finger_name">RIGHT_INDEX</column>
+            <column name="finger_code">RI</column>
+            <column name="finger_print">ef01ffffffff0201020301581b0000fffefffef00ee002c000c00080000000000000000000000000000000000000000000000000000000000000000000000000005d8f027e731d997e4ea8c35e1aaad0fe6130db1e513c1b5e29c367be0da952f75d2943ff40b6c25f58ba07bf2e24aa3c269c2b3d6a2785bd69ab9a7d363e515d36c1ec7d752f9d9a19256ad329a7543b763247db2b992912621a81f61fa556962f97d28e699b996f20a6eb1500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003764ef01ffffffff080102030156180000fffefffef9fee006c006c000c000800080008000000000000000000000000000000000000000000000000000000000000000561d59be2a1de97e4ea8839e5f28c37e6130db1e4335c33e4e9b427f739f9a3f6aa7461f692b5adf59bf9f1f742edddc51bb9a1c763247dd5839889d1e190d72661b57da629c82ba2ac2a81a1c9ba67336c1ec772b1929ae36be11753916128a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000337b</column>
+            <column name="enroll_time">2018-02-01 19:16:37</column>
+        </table>
+        <table name="fingerprint_details">
+            <column name="name">Yogesh 3</column>
+            <column name="staff_id">14IT49</column>
+            <column name="store_id">3</column>
+            <column name="finger_name">RIGHT_THUMB</column>
+            <column name="finger_code">RT</column>
+            <column name="finger_print">ef01ffffffff020102030159200000fffeff1efe0ef80ef80ee00e0002000000000000000000000000000000000000000000000000000000000000000000000000570d94de613ad6be6b3f983e262ae99f31b96a9f1022289c6aacc1bc712d983c6e39985454bd80bc1723513d3fbe2c9d40c1137d4f0eab5a4012141a4f92abba519aec1a3f20ea1a6838c1d2561655185b132c36291c29f660a1969657a517564c40c0965b952bf14cbf15b7471f137446a2ebf43a9deb924ea440313517aae60000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003d4cef01ffffffff080102030155230000fffeff1efe1ef81ef81ee01e000200000000000000000000000000000000000000000000000000000000000000000000000025ab693f31b96a9f6ac0585f560d949c521aebfc0fa2a87c6a2c823c70ad98bc6e39989c1723513d3fbe2c9d40c1139d33a395f22da3ead33fa0aa9863a1d73850bdecf8169c2a9340125516469f53f661a4d69661bad6b64c40c0564cbf15d74e8eab34401cec745c37800e43226bf549136bac289c2a32531e15b22b98932b4ea4402f4ca2562c3497aa86000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000465e</column>
+            <column name="enroll_time">2018-02-02 12:10:51</column>
+        </table>
+        <table name="fingerprint_details">
+            <column name="name">Gokul T S</column>
+            <column name="staff_id">14IT50</column>
+            <column name="store_id">7</column>
+            <column name="finger_name">LEFT_MID</column>
+            <column name="finger_code">LM</column>
+            <column name="finger_print">ef01ffffffff020102030154170000e03e800e80060002000000000000000000000000000000000000000000000000000000000000000000000000000000000000550d973e418fabfe3f16915e6e175b9e379ecefe48224fde52a5121e09268d7e43a8281e082da49e75af9dfe37350a7e503888be2d3a8abe273f8b9e5a89587f5c96857f5b9e591f4e18815240b60a1b4737c9db539917d251ac8bad00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028bbef01ffffffff080102030153220000fffefdfec01ec01e801e801e8006000000000000000080008000800080008000800000000000000000000000000000000000568e177e430f6cfe3e96513e5a1f58de4228e77e36b4ca5e68b94a3e2d3a4afe123b8e56273f8a7e359d8e7f4820101f6ea6c85f712c5e7f69bd9fdf4e1842bc5499993c503888fa45431f9a52afc95b44330b524435a1d25a2e487949380a9040360a3773b69f14753049cf4cbc499557a3484c4e2b11d249baa10c502d0ad35aa91bec59a59b8d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000041fc</column>
+            <column name="enroll_time">2018-02-02 19:20:19</column>
+        </table>
+        <!-- Table IT_entry -->
+        <!-- Table MECH_entry -->
+        <!-- Table overall_presence -->
+        <!-- Table staff_details -->
+        <table name="staff_details">
+            <column name="name">Yogesh TS </column>
+            <column name="staff_id">14IT46</column>
+            <column name="store_id">2</column>
+            <column name="finger_preference">LT</column>
+            <column name="department">IT</column>
+            <column name="designation">AP-II</column>
+            <column name="cadre">T</column>
+            <column name="gender">M</column>
+            <column name="phone">7373535614</column>
+            <column name="email">tsyogesh40@gmail.com</column>
+            <column name="DOJ">2018-01-30</column>
+        </table>
+        <table name="staff_details">
+            <column name="name">Yogesh 1</column>
+            <column name="staff_id">14IT47</column>
+            <column name="store_id">4</column>
+            <column name="finger_preference">LM</column>
+            <column name="department">IT</column>
+            <column name="designation">AP-II</column>
+            <column name="cadre">NT</column>
+            <column name="gender">M</column>
+            <column name="phone">7373535614</column>
+            <column name="email">tsyogesh40@gmail.com</column>
+            <column name="DOJ">2018-02-21</column>
+        </table>
+        <table name="staff_details">
+            <column name="name">Yogesh 2</column>
+            <column name="staff_id">14it48</column>
+            <column name="store_id">6</column>
+            <column name="finger_preference">LT</column>
+            <column name="department">IT</column>
+            <column name="designation">AP-II</column>
+            <column name="cadre">NT</column>
+            <column name="gender">M</column>
+            <column name="phone">7373535614</column>
+            <column name="email">tsyogesh40@gmail.com</column>
+            <column name="DOJ">2018-02-28</column>
+        </table>
+        <table name="staff_details">
+            <column name="name">Yogesh 3</column>
+            <column name="staff_id">14IT49</column>
+            <column name="store_id">3</column>
+            <column name="finger_preference">LI</column>
+            <column name="department">IT</column>
+            <column name="designation">AP-III</column>
+            <column name="cadre">T</column>
+            <column name="gender">M</column>
+            <column name="phone">7373535614</column>
+            <column name="email">tsyogesh40@gmail.com</column>
+            <column name="DOJ">2018-02-01</column>
+        </table>
+        <table name="staff_details">
+            <column name="name">Gokul T S</column>
+            <column name="staff_id">14IT50</column>
+            <column name="store_id">7</column>
+            <column name="finger_preference">LM</column>
+            <column name="department">CSE</column>
+            <column name="designation">AP-II</column>
+            <column name="cadre">T</column>
+            <column name="gender">M</column>
+            <column name="phone">7373535614</column>
+            <column name="email">tsgokult@gmail.com</column>
+            <column name="DOJ">2018-02-02</column>
+        </table>
+        <!-- Table temp_entry -->
+        <table name="temp_entry">
+            <column name="cadre">NT</column>
+            <column name="name">Yogesh 1</column>
+            <column name="staff_id">14IT47</column>
+            <column name="store_id">4</column>
+            <column name="dept">IT</column>
+            <column name="in_time">18:36:29</column>
+            <column name="out_time">18:40:31</column>
+            <column name="p_value">1</column>
+            <column name="no_of_entry">2</column>
+            <column name="status">LATE</column>
+            <column name="date">2018-02-02</column>
+            <column name="semester">ODD</column>
+            <column name="year">2018</column>
+        </table>
+        <table name="temp_entry">
+            <column name="cadre">NT</column>
+            <column name="name">Yogesh 2</column>
+            <column name="staff_id">14it48</column>
+            <column name="store_id">6</column>
+            <column name="dept">IT</column>
+            <column name="in_time">19:01:29</column>
+            <column name="out_time">19:24:28</column>
+            <column name="p_value">1</column>
+            <column name="no_of_entry">2</column>
+            <column name="status">LATE</column>
+            <column name="date">2018-02-02</column>
+            <column name="semester">ODD</column>
+            <column name="year">2018</column>
+        </table>
+        <table name="temp_entry">
+            <column name="cadre">T</column>
+            <column name="name">Yogesh TS </column>
+            <column name="staff_id">14IT46</column>
+            <column name="store_id">2</column>
+            <column name="dept">IT</column>
+            <column name="in_time">19:05:48</column>
+            <column name="out_time">19:06:28</column>
+            <column name="p_value">1</column>
+            <column name="no_of_entry">2</column>
+            <column name="status">LATE</column>
+            <column name="date">2018-02-02</column>
+            <column name="semester">ODD</column>
+            <column name="year">2018</column>
+        </table>
+        <table name="temp_entry">
+            <column name="cadre">T</column>
+            <column name="name">Yogesh 3</column>
+            <column name="staff_id">14IT49</column>
+            <column name="store_id">3</column>
+            <column name="dept">IT</column>
+            <column name="in_time">19:08:33</column>
+            <column name="out_time">19:08:59</column>
+            <column name="p_value">1</column>
+            <column name="no_of_entry">2</column>
+            <column name="status">LATE</column>
+            <column name="date">2018-02-02</column>
+            <column name="semester">ODD</column>
+            <column name="year">2018</column>
+        </table>
+        <table name="temp_entry">
+            <column name="cadre">T</column>
+            <column name="name">Gokul T S</column>
+            <column name="staff_id">14IT50</column>
+            <column name="store_id">7</column>
+            <column name="dept">CSE</column>
+            <column name="in_time">19:21:53</column>
+            <column name="out_time">19:22:19</column>
+            <column name="p_value">1</column>
+            <column name="no_of_entry">2</column>
+            <column name="status">LATE</column>
+            <column name="date">2018-02-02</column>
+            <column name="semester">ODD</column>
+            <column name="year">2018</column>
+        </table>
+        <!-- Table user_credentials -->
+    </database>
+</pma_xml_export>
